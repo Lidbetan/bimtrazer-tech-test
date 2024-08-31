@@ -11,11 +11,14 @@ export default function AddBlockForm() {
     let [endDate, setEndDate] = useState<DateValue>(
         parseAbsoluteToLocal("2021-04-07T18:45:22Z")
     );
-    // const [newBlock, setNewBlock] = useState<Block>({
-    //     id: "somestringid",
-    //     description: "Lo quevenga del input",
-    //     startDate:,
-    // });
+    //TODO TERMINAR DE PULIR COMO AGREGAR EL OBJETO NEWBLOCK
+    const [newBlock, setNewBlock] = useState<Block>({
+        id: "somestringid",
+        description: "Lo quevenga del input",
+        startDate: startDate.toString(),
+        endDate: endDate.toString(),
+        progress: 50,
+    });
     const handleInputs = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.value);
     };
@@ -24,8 +27,9 @@ export default function AddBlockForm() {
         e.preventDefault();
         //Tiene que llamar a addBlock
     };
-    console.log("Date en StartDate", startDate.set);
-    console.log(`Date en End ${endDate}`);
+    //SE PASA EL OBJETO A STRING
+    console.log("Date en StartDate", startDate.toString());
+    console.log("Date en EndDate", endDate.toString());
 
     return (
         <>
