@@ -9,7 +9,7 @@ export default function Header() {
                     </span>
                 </h1>
                 <h2 className="text-gray-500 text-2xl text-center">
-                    Here you can manage your tasks
+                    Managing task has never been easier before
                 </h2>
             </div>
         </header>

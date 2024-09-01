@@ -14,40 +14,55 @@ export default function AddBlockForm() {
         parseAbsoluteToLocal("2024-09-01T18:45:22Z")
     );
     const [descriptionValue, setDescriptionValue] = useState("");
+    //Manages progress value number
     const [progressValue, setProgressValue] = useState(0);
-    const [valid, setValid] = useState(true);
+    //Manages conditional rendering of alert
+    const [valid, setValid] = useState<boolean>(true);
+    //Manages error state of Progress Input
+    const [errorInput, setErrorInput] = useState<boolean>(false);
+    //Manages max limit characters
+    const [limitMsg, setLimitMsg] = useState({
+        limit: 40,
+        actual: 0,
+    });
     //Random ID
     const randomId = Date.now().toString(16);
+
     //New block data
-    const formattedStartDate = startDate
-        .toString()
-        .replace("[America/Buenos_Aires]", " ")
-        .trim();
-    const formattedEndDate = endDate
-        .toString()
-        .replace("[America/Buenos_Aires]", " ")
-        .trim();
+    const formattedStartDate: string | null = startDate
+        ? startDate.toString().replace("[America/Buenos_Aires]", " ").trim()
+        : "fecha no disponible";
+
+    const formattedEndDate: string | null = endDate
+        ? endDate.toString().replace("[America/Buenos_Aires]", " ").trim()
+        : "fecha no disponible";
     const description: string = descriptionValue;
     const progress: number = progressValue;
 
-    //Reads description input value
+    //Reads and sets the description input value and length
     const handleDescriptionInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDescriptionValue(e.target.value);
-        //If there is any content on description input, sets valid to true
+        const target = e.target.value;
+        console.log(target.length);
+        setLimitMsg({ ...limitMsg, actual: target.length });
+        setDescriptionValue(target);
+        //If there is any content on description input, sets valid to true to validate it
         setValid(true);
     };
     //Reads and transform the value to number
     const handleProgressInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProgressValue(Number(e.target.value));
+        const number = Number(e.target.value);
+        if (number > 100) {
+            setErrorInput(true);
+        } else {
+            setErrorInput(false);
+            setProgressValue(Number(e.target.value));
+        }
     };
-
-    //TODO LOGICA DEL INPUT DE PROGRESO
-
     //HandleSubmit sends the newBlock to the store
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            if (description.trim() !== "") {
+            if (description.trim() !== "" && startDate && endDate) {
                 //New Block declaration
                 const newBlock: Block = {
                     id: randomId,
@@ -72,17 +87,28 @@ export default function AddBlockForm() {
         <>
             <form
                 onSubmit={handleSubmit}
-                className="flex flex-col gap-6 mx-auto max-w-[750px] md:grid grid-cols-2 grid-rows-2"
+                className="flex relative flex-col gap-6 mx-auto max-w-[750px] md:grid grid-cols-2 grid-rows-2"
             >
                 <Input
                     onChange={handleDescriptionInput}
                     label="Enter description"
                     isRequired
-                    className="max-w-[350px]"
+                    isInvalid={!valid}
+                    className="max-w-[350px] relative"
+                    maxLength={limitMsg.limit}
                 />
+                <p
+                    className={`w-[20px] absolute left-[170px] text-[10px] text-right${
+                        limitMsg.actual === limitMsg.limit &&
+                        "font-bold text-red-500"
+                    }`}
+                >
+                    {limitMsg.actual}/{limitMsg.limit}
+                </p>
                 {/*--- StartDate Input Begin --- */}
                 <div className="w-full max-w-xl flex flex-col items-start gap-4">
                     <DateInput
+                        hourCycle={24}
                         granularity="second"
                         label="Start Date"
                         value={startDate}
@@ -95,6 +121,7 @@ export default function AddBlockForm() {
                 {/*--- EndDate Input Begin --- */}
                 <div className="w-full max-w-xl flex flex-col items-start gap-4">
                     <DateInput
+                        hourCycle={24}
                         granularity="second"
                         label="End Date"
                         value={endDate}
@@ -107,8 +134,10 @@ export default function AddBlockForm() {
                 {/*--- Progress Input Start --- */}
                 <Input
                     type="number"
-                    label="Enter progress status"
+                    label="Enter progress value"
                     placeholder="0-100"
+                    isInvalid={errorInput}
+                    errorMessage="Enter a number from 0 to 100"
                     onChange={handleProgressInput}
                     className="max-w-[350px] col-span-1 row-start-2"
                 />

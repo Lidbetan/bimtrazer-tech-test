@@ -5,10 +5,11 @@ import BlockItem from "@/components/blockItem";
 import AddBlockForm from "@/components/addBlockForm";
 import { useEffect } from "react";
 import Header from "@/components/header";
-import { Accordion, AccordionItem, Chip } from "@nextui-org/react";
+import { Accordion, AccordionItem, Button, Chip } from "@nextui-org/react";
+import { DeleteIcon } from "@/components/icons/deleteIcon";
 
 export default function Home() {
-    const { blocks, fetchList } = UseMyStore();
+    const { blocks, fetchList, removeBlock } = UseMyStore();
     //Makes the call to fetch the data and updates the store with it
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +29,7 @@ export default function Home() {
                         selectionMode="multiple"
                         itemClasses={{
                             base: ["py-4]"],
-                            // content: ["justify-content-center"],
+                            content: ["ml-4"],
                         }}
                     >
                         {blocks &&
@@ -36,25 +37,45 @@ export default function Home() {
                                 <AccordionItem
                                     key={item.id}
                                     aria-label="Chung Miller"
+                                    classNames={{
+                                        startContent: [
+                                            "flex flex-row w-11/12 items-center gap-3 justify-between ",
+                                        ],
+                                    }}
                                     startContent={
-                                        <Chip
-                                            variant="dot"
-                                            className="bg-inherit"
-                                            classNames={{
-                                                dot: [
-                                                    `${
-                                                        item.progress === 100
-                                                            ? "bg-green-600"
-                                                            : item.progress <=
-                                                              25
-                                                            ? "bg-orange-600"
-                                                            : "bg-blue-600"
-                                                    }`,
-                                                ],
-                                            }}
-                                        >
-                                            {item.description.toUpperCase()}
-                                        </Chip>
+                                        <>
+                                            <Chip
+                                                variant="dot"
+                                                className="bg-inherit"
+                                                classNames={{
+                                                    dot: [
+                                                        `${
+                                                            item.progress ===
+                                                            100
+                                                                ? "bg-green-600"
+                                                                : item.progress <=
+                                                                  25
+                                                                ? "bg-orange-600"
+                                                                : "bg-blue-600"
+                                                        }`,
+                                                    ],
+                                                }}
+                                            >
+                                                {item.description.toUpperCase()}
+                                            </Chip>
+                                            <Button
+                                                onClick={() =>
+                                                    removeBlock(item.id)
+                                                }
+                                                className="bg-red-400 h-[22px] min-w-[15px] w-[22px] p-1 rounded-full md:hidden"
+                                            >
+                                                <DeleteIcon
+                                                    fillColor="#000"
+                                                    width="12"
+                                                    height="12"
+                                                />
+                                            </Button>
+                                        </>
                                     }
                                 >
                                     <BlockItem key={item.id} itemData={item} />

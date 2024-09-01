@@ -1,10 +1,14 @@
 import { iconProps } from "@/interfaces/icon";
 
-export const DeleteIcon: React.FC<iconProps> = ({ fillColor }) => (
+export const DeleteIcon: React.FC<iconProps> = ({
+    fillColor,
+    width,
+    height,
+}) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
+        width={width}
+        height={height}
         viewBox="0 0 23 24"
         fill="none"
     >

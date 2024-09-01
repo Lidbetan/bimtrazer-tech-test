@@ -41,7 +41,7 @@ export default function BlockItem({ itemData }: { itemData: Block }) {
                     onClick={() => removeBlock(itemData.id)}
                     className="bg-red-400 w-full p-2 rounded-full md:w-[20px]"
                 >
-                    <DeleteIcon fillColor="#000" />
+                    <DeleteIcon fillColor="#000" width="20" height="20" />
                 </Button>
             </div>
         </>
