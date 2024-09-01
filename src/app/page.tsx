@@ -5,7 +5,7 @@ import BlockItem from "@/components/blockItem";
 import AddBlockForm from "@/components/addBlockForm";
 
 export default function Home() {
-    const { blocksList, addBlock } = UseMyStore();
+    const { blocksList } = UseMyStore();
     console.log(blocksList);
 
     const newBlock = {
@@ -14,16 +14,6 @@ export default function Home() {
         startDate: "2024-06-03T00:00:00",
         endDate: "2024-06-03T23:59:59",
         progress: 75,
-    };
-
-    const handeClick = async () => {
-        try {
-            if (newBlock) {
-                addBlock(newBlock);
-            }
-        } catch {
-            console.error("no new blocks");
-        }
     };
 
     return (
@@ -36,7 +26,6 @@ export default function Home() {
                     blocksList.map((item) => (
                         <BlockItem key={item.id} itemData={item} />
                     ))}
-                <Button onPress={handeClick}>Add New Block</Button>
                 <AddBlockForm />
             </main>
             <footer>Footer</footer>

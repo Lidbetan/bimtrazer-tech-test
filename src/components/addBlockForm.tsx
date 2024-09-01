@@ -3,38 +3,70 @@ import { useState } from "react";
 import { Button, DateInput, Input } from "@nextui-org/react";
 import { DateValue, parseAbsoluteToLocal } from "@internationalized/date";
 import { Block } from "@/interfaces/block";
+import { UseMyStore } from "@/app/store/blocksStore";
 
 export default function AddBlockForm() {
-    let [startDate, setStartDate] = useState<DateValue>(
+    const { updateBlockStore } = UseMyStore();
+    const [startDate, setStartDate] = useState<DateValue>(
         parseAbsoluteToLocal("2021-04-07T18:45:22Z")
     );
-    let [endDate, setEndDate] = useState<DateValue>(
+    const [endDate, setEndDate] = useState<DateValue>(
         parseAbsoluteToLocal("2021-04-07T18:45:22Z")
     );
-    //TODO TERMINAR DE PULIR COMO AGREGAR EL OBJETO NEWBLOCK
-    const [newBlock, setNewBlock] = useState<Block>({
-        id: "somestringid",
-        description: "Lo quevenga del input",
-        startDate: startDate.toString(),
-        endDate: endDate.toString(),
-        progress: 50,
-    });
-    const handleInputs = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
+    const [descriptionValue, setDescriptionValue] = useState("");
+    const [progressValue, setProgressValue] = useState(0);
+
+    //New block data
+    const formattedStartDate = startDate.toString();
+    const formattedEndDate = endDate.toString();
+    const description: string = descriptionValue;
+    const progress: number = progressValue;
+
+    //Reads description input value
+    const handleDescriptionInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDescriptionValue(e.target.value);
     };
+    //Reads and transform the value to number
+    const handleProgressInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setProgressValue(Number(e.target.value));
+    };
+    //TODO LOGICA DEL INPUT DE PROGRESO
+
     //HandleSubmit TIENE QUE ENVIAR EL OBJETO CON EL NUEVO BLOQUE
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        try {
+            //TODO IMPROVE FORM VALIDATION
+            if (description.trim() !== "") {
+                //New Block
+                const newBlock: Block = {
+                    id: "someid",
+                    description: description,
+                    startDate: formattedStartDate,
+                    endDate: formattedEndDate,
+                    progress: progress,
+                };
+                console.log("NEW-BLOCK", newBlock);
+                await updateBlockStore(newBlock);
+            } else {
+                console.log("Please, complete all fields...");
+            }
+        } catch (error) {
+            console.log("An error has ocurred, please try again...");
+        }
+
         //Tiene que llamar a addBlock
     };
     //SE PASA EL OBJETO A STRING
-    console.log("Date en StartDate", startDate.toString());
-    console.log("Date en EndDate", endDate.toString());
 
     return (
         <>
             <form onSubmit={handleSubmit}>
-                <Input onChange={handleInputs} label="Enter description" />
+                <Input
+                    onChange={handleDescriptionInput}
+                    label="Enter description"
+                    isRequired
+                />
                 {/*--- StartDate Input Begin --- */}
                 <div className="w-full max-w-xl flex flex-col items-start gap-4">
                     <DateInput
@@ -42,6 +74,7 @@ export default function AddBlockForm() {
                         label="Start Date"
                         value={startDate}
                         onChange={setStartDate}
+                        isRequired
                     />
                 </div>
                 {/*--- StartDate Input Ends --- */}
@@ -52,9 +85,19 @@ export default function AddBlockForm() {
                         label="End Date"
                         value={endDate}
                         onChange={setEndDate}
+                        isRequired
                     />
                 </div>
                 {/*--- EndDate Input Start --- */}
+                {/*--- Progress Input Start --- */}
+                <Input
+                    type="number"
+                    isRequired
+                    label="Enter progress status"
+                    placeholder="0-100"
+                    onChange={handleProgressInput}
+                />
+                {/*--- Progress Input End --- */}
                 <Button type="submit">Submit</Button>
             </form>
         </>

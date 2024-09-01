@@ -7,11 +7,11 @@ const { blockList }: { blockList: Block[] } = data;
 
 interface BlockStore {
     blocksList: Block[];
-    addBlock: (response: Block) => void;
+    updateBlockStore: (response: Block) => void;
 }
 export const UseMyStore = create<BlockStore>((set, get) => ({
     blocksList: blockList,
-    addBlock: (response) => {
+    updateBlockStore: (response) => {
         const { blocksList } = get();
         set({ blocksList: [...blocksList, response] });
     },
