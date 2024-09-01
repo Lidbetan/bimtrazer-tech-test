@@ -1,13 +1,14 @@
 "use client";
-import { Button } from "@nextui-org/react";
+
 import { UseMyStore } from "./store/blocksStore";
 import BlockItem from "@/components/blockItem";
 import AddBlockForm from "@/components/addBlockForm";
+import useFetch from "@/utils/useFetch";
 
 export default function Home() {
     const { blocksList } = UseMyStore();
-    console.log(blocksList);
-
+    // console.log(blocksList);
+    console.log(useFetch("/copied-data.json"));
     const newBlock = {
         id: "6671997cfcac3e0bfbe8607c",
         description: "SUPER FANCY STAIRS",
