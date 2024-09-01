@@ -3,33 +3,31 @@
 import { UseMyStore } from "./store/blocksStore";
 import BlockItem from "@/components/blockItem";
 import AddBlockForm from "@/components/addBlockForm";
-import useFetch from "@/utils/useFetch";
+import { useEffect } from "react";
+import Header from "@/components/header";
 
 export default function Home() {
-    const { blocksList } = UseMyStore();
-    // console.log(blocksList);
-    console.log(useFetch("/copied-data.json"));
-    const newBlock = {
-        id: "6671997cfcac3e0bfbe8607c",
-        description: "SUPER FANCY STAIRS",
-        startDate: "2024-06-03T00:00:00",
-        endDate: "2024-06-03T23:59:59",
-        progress: 75,
-    };
+    const { blocks, fetchList } = UseMyStore();
+    //Makes the call to fetch the data and updates the store with it
+    useEffect(() => {
+        const fetchData = async () => {
+            fetchList(); //Calls fetchList from the store
+        };
+        fetchData(); //Executes, retrieve the data and updates blocks in the store
+    }, [fetchList]);
 
     return (
         <>
-            <header>
-                <h1>Block List</h1>
-            </header>
-            <main className="flex flex-col place-content-center ">
-                {blocksList &&
-                    blocksList.map((item) => (
-                        <BlockItem key={item.id} itemData={item} />
-                    ))}
+            <Header />
+            <main className="w-11/12 flex flex-col gap-10 mx-auto md:max-w-[768px] lg:max-w-[1024px] my-[5rem]">
+                <div className="flex flex-col justify-items-center items-center gap-20 md:grid grid-cols-2 lg:grid-cols-3 ">
+                    {blocks &&
+                        blocks.map((item) => (
+                            <BlockItem key={item.id} itemData={item} />
+                        ))}
+                </div>
                 <AddBlockForm />
             </main>
-            <footer>Footer</footer>
         </>
     );
 }

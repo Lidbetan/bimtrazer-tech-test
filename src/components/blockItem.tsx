@@ -1,19 +1,35 @@
 import { Block } from "@/interfaces/block";
-import { Button, Progress } from "@nextui-org/react";
+import { Button, Chip } from "@nextui-org/react";
 import ProgressBar from "./progressBar";
 import { UseMyStore } from "@/app/store/blocksStore";
+import { DeleteIcon } from "./icons/deleteIcon";
 
 export default function BlockItem({ itemData }: { itemData: Block }) {
     const { removeBlock } = UseMyStore();
     return (
         <>
-            <p>{itemData.description}</p>
-            <p>{itemData.startDate}</p>
-            <p>{itemData.endDate}</p>
-            <ProgressBar progress={itemData.progress} />
-            <Button onClick={() => removeBlock(itemData.id)}>
-                Delete Block
-            </Button>
+            <div className="flex flex-col gap-4 items-center justify-center w-full max-w-60 border-2 border-amber-200 p-5 rounded-3xl shadow-lg transition ease-in-out duration-700 hover:scale-110">
+                <Chip variant="dot" color="warning" className="bg-inherit">
+                    {itemData.description.toUpperCase()}
+                </Chip>
+                <div className="flex flex-col text-[12px]">
+                    <span>Start date</span>
+                    <Chip>{itemData.startDate}</Chip>
+                </div>
+                <div className="flex flex-col text-[12px]">
+                    <span>End Date</span>
+                    <Chip>{itemData.endDate}</Chip>{" "}
+                </div>
+
+                <ProgressBar progress={itemData.progress} />
+                {/* Delete Button */}
+                <Button
+                    onClick={() => removeBlock(itemData.id)}
+                    className="bg-red-400 w-full p-2 rounded-full md:w-[20px]"
+                >
+                    <DeleteIcon fillColor="#000" />
+                </Button>
+            </div>
         </>
     );
 }

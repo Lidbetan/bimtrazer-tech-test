@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Button, DateInput, Input } from "@nextui-org/react";
+import { Button, Chip, DateInput, Input } from "@nextui-org/react";
 import { DateValue, parseAbsoluteToLocal } from "@internationalized/date";
 import { Block } from "@/interfaces/block";
 import { UseMyStore } from "@/app/store/blocksStore";
@@ -8,64 +8,77 @@ import { UseMyStore } from "@/app/store/blocksStore";
 export default function AddBlockForm() {
     const { updateBlockStore } = UseMyStore();
     const [startDate, setStartDate] = useState<DateValue>(
-        parseAbsoluteToLocal("2021-04-07T18:45:22Z")
+        parseAbsoluteToLocal("2024-09-01T18:45:22Z")
     );
     const [endDate, setEndDate] = useState<DateValue>(
-        parseAbsoluteToLocal("2021-04-07T18:45:22Z")
+        parseAbsoluteToLocal("2024-09-01T18:45:22Z")
     );
     const [descriptionValue, setDescriptionValue] = useState("");
     const [progressValue, setProgressValue] = useState(0);
-
+    const [valid, setValid] = useState(true);
+    //Random ID
+    const randomId = Date.now().toString(16);
     //New block data
-    const formattedStartDate = startDate.toString();
-    const formattedEndDate = endDate.toString();
+    const formattedStartDate = startDate
+        .toString()
+        .replace("[America/Buenos_Aires]", " ")
+        .trim();
+    const formattedEndDate = endDate
+        .toString()
+        .replace("[America/Buenos_Aires]", " ")
+        .trim();
     const description: string = descriptionValue;
     const progress: number = progressValue;
 
     //Reads description input value
     const handleDescriptionInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDescriptionValue(e.target.value);
+        //If there is any content on description input, sets valid to true
+        setValid(true);
     };
     //Reads and transform the value to number
     const handleProgressInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProgressValue(Number(e.target.value));
     };
+
     //TODO LOGICA DEL INPUT DE PROGRESO
 
-    //HandleSubmit TIENE QUE ENVIAR EL OBJETO CON EL NUEVO BLOQUE
+    //HandleSubmit sends the newBlock to the store
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            //TODO IMPROVE FORM VALIDATION
             if (description.trim() !== "") {
-                //New Block
+                //New Block declaration
                 const newBlock: Block = {
-                    id: "someid",
+                    id: randomId,
                     description: description,
                     startDate: formattedStartDate,
                     endDate: formattedEndDate,
                     progress: progress,
                 };
-                console.log("NEW-BLOCK", newBlock);
                 await updateBlockStore(newBlock);
             } else {
-                console.log("Please, complete all fields...");
+                setValid(false);
             }
         } catch (error) {
-            console.log("An error has ocurred, please try again...");
+            console.error(
+                "Ha ocurrido un erro con su solicitud, intenter nuevamente...",
+                error
+            );
         }
-
-        //Tiene que llamar a addBlock
     };
-    //SE PASA EL OBJETO A STRING
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-6 mx-auto max-w-[750px] md:grid grid-cols-2 grid-rows-2"
+            >
                 <Input
                     onChange={handleDescriptionInput}
                     label="Enter description"
                     isRequired
+                    className="max-w-[350px]"
                 />
                 {/*--- StartDate Input Begin --- */}
                 <div className="w-full max-w-xl flex flex-col items-start gap-4">
@@ -75,6 +88,7 @@ export default function AddBlockForm() {
                         value={startDate}
                         onChange={setStartDate}
                         isRequired
+                        className="max-w-[350px]"
                     />
                 </div>
                 {/*--- StartDate Input Ends --- */}
@@ -86,19 +100,34 @@ export default function AddBlockForm() {
                         value={endDate}
                         onChange={setEndDate}
                         isRequired
+                        className="max-w-[350px]"
                     />
                 </div>
                 {/*--- EndDate Input Start --- */}
                 {/*--- Progress Input Start --- */}
                 <Input
                     type="number"
-                    isRequired
                     label="Enter progress status"
                     placeholder="0-100"
                     onChange={handleProgressInput}
+                    className="max-w-[350px] col-span-1 row-start-2"
                 />
                 {/*--- Progress Input End --- */}
-                <Button type="submit">Submit</Button>
+                <Button
+                    type="submit"
+                    className="text-center col-span-2 mx-auto w-full md:w-[150px] bg-amber-300"
+                >
+                    Submit
+                </Button>
+                {!valid && (
+                    <Chip
+                        color="warning"
+                        variant="bordered"
+                        className="col-span-2 mx-auto w-full md:w-[150px]"
+                    >
+                        Please, complete all fields
+                    </Chip>
+                )}
             </form>
         </>
     );

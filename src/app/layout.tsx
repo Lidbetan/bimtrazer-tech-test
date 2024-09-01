@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { NextUIProvider } from "@nextui-org/react";
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({ subsets: ["latin"], weight: ["100", "400", "900"] });
 
 export const metadata: Metadata = {
     title: "Bimtrazer Tech Test",
@@ -17,9 +17,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={roboto.className}>
                 <NextUIProvider>
-                    <div className="grid grid-cols-1 grid-rows-layout min-h-screen place-content-center">
+                    <div className="grid grid-cols-1 grid-rows-layout justify-center items-center align-middle w-full min-h-screen mx-auto bg-body border-4 border-red-800">
                         {children}
                     </div>
                 </NextUIProvider>

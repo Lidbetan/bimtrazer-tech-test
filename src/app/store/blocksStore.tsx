@@ -1,26 +1,30 @@
 "use client";
 import { create } from "zustand";
 import { Block } from "@/interfaces/block";
-import data from "../../data/data.json";
-
-const { blockList }: { blockList: Block[] } = data;
+import { DataFetch } from "@/utils/dataFetch";
 
 interface BlockStore {
-    blocksList: Block[];
+    blocks: Block[];
+    fetchList: () => void;
     updateBlockStore: (response: Block) => void;
     removeBlock: (id: string) => void;
 }
 export const UseMyStore = create<BlockStore>((set, get) => ({
-    blocksList: blockList,
+    blocks: [],
+    //Fetch the data and assigns it to blocks
+    fetchList: async () => {
+        const dataList = await DataFetch();
+        set({ blocks: dataList.blockList });
+    },
     //Update blocksList when adding a new block
     updateBlockStore: (response) => {
-        const { blocksList } = get();
-        set({ blocksList: [...blocksList, response] });
+        const { blocks } = get();
+        set({ blocks: [...blocks, response] });
     },
     //Updates blockList when removes a block, receives the block's ID as argument to filter the existing list.
     removeBlock: (id) => {
-        const { blocksList } = get();
-        const filteredBlocksList = blocksList.filter((item) => item.id != id);
-        set({ blocksList: filteredBlocksList });
+        const { blocks } = get();
+        const filteredBlocksList = blocks.filter((item) => item.id != id);
+        set({ blocks: filteredBlocksList });
     },
 }));

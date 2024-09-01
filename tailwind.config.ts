@@ -12,8 +12,10 @@ const config: Config = {
     extend: {
       gridTemplateRows: {
         layout: "auto 1fr auto"
-      }
-
+      },
+      backgroundColor: {
+        body: "#F6F5F2"
+      },
     },
   },
   darkMode: "class",
