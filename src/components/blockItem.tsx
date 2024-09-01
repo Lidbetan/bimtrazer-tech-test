@@ -9,7 +9,21 @@ export default function BlockItem({ itemData }: { itemData: Block }) {
     return (
         <>
             <div className="flex flex-col gap-4 items-center justify-center w-full max-w-60 border-2 border-amber-200 p-5 rounded-3xl shadow-lg transition ease-in-out duration-700 hover:scale-110">
-                <Chip variant="dot" color="warning" className="bg-inherit">
+                <Chip
+                    variant="dot"
+                    className="bg-inherit hidden md:flex"
+                    classNames={{
+                        dot: [
+                            `${
+                                itemData.progress === 100
+                                    ? "bg-green-600"
+                                    : itemData.progress <= 25
+                                    ? "bg-orange-600"
+                                    : "bg-blue-600"
+                            }`,
+                        ],
+                    }}
+                >
                     {itemData.description.toUpperCase()}
                 </Chip>
                 <div className="flex flex-col text-[12px]">
