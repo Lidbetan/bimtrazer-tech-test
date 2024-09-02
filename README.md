@@ -44,3 +44,7 @@ npm run dev
 Finally, press Ctrl + Click on the local link to open the app:
 
 ![Captura](https://github.com/Lidbetan/prueba-tecnica/assets/131318671/a56d96d1-dfac-4269-8d9d-992543465ca7)
+## Deploy
+
+https://bimtrazer-tech-test.vercel.app/
+
