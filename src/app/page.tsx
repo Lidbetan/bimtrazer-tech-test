@@ -22,21 +22,20 @@ export default function Home() {
         <>
             <Header />
             <main className="w-11/12 flex flex-col gap-10 mx-auto md:max-w-[768px] lg:max-w-[1024px] my-[5rem]">
-                <div className="flex flex-col gap-20 md:flex-row md:w-10/12 mx-auto">
+                <div className="flex flex-col w-11/12 gap-20 md:flex-row md:w-10/12 mx-auto">
                     {/* Accordion only shows on mobile */}
                     <Accordion
                         className="md:hidden"
                         selectionMode="multiple"
                         itemClasses={{
                             base: ["py-4]"],
-                            content: ["ml-4"],
                         }}
                     >
                         {blocks &&
                             blocks.map((item) => (
                                 <AccordionItem
                                     key={item.id}
-                                    aria-label="Chung Miller"
+                                    aria-label="Task-Item"
                                     classNames={{
                                         startContent: [
                                             "flex flex-row w-11/12 items-center gap-3 justify-between ",
@@ -58,6 +57,9 @@ export default function Home() {
                                                                 ? "bg-orange-600"
                                                                 : "bg-blue-600"
                                                         }`,
+                                                    ],
+                                                    content: [
+                                                        "overflow-hidden  max-w-[170px]",
                                                     ],
                                                 }}
                                             >

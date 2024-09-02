@@ -19,7 +19,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={roboto.className}>
                 <NextUIProvider>
-                    <div className="grid grid-cols-1 grid-rows-layout justify-center items-center align-middle w-full min-h-screen mx-auto bg-body">
+                    <div className="grid grid-cols-1 grid-rows-layout justify-center items-center align-middle w-full min-h-screen mx-auto bg-body overflow-hidden">
                         {children}
                     </div>
                 </NextUIProvider>

@@ -31,13 +31,20 @@ export default function AddBlockForm() {
     const randomId = Date.now().toString(16);
 
     //New block data
-    const formattedStartDate: string | null = startDate
-        ? startDate.toString().replace("[America/Buenos_Aires]", " ").trim()
+    const originalStartDateString = startDate.toString();
+    const formattedStartDate: string | null = originalStartDateString
+        ? originalStartDateString
+              .slice(0, originalStartDateString.indexOf("["))
+              .trim()
         : "fecha no disponible";
 
-    const formattedEndDate: string | null = endDate
-        ? endDate.toString().replace("[America/Buenos_Aires]", " ").trim()
+    const originalEndDateString = startDate.toString();
+    const formattedEndDate: string | null = originalEndDateString
+        ? originalEndDateString
+              .slice(0, originalEndDateString.indexOf("["))
+              .trim()
         : "fecha no disponible";
+
     const description: string = descriptionValue;
     const progress: number = progressValue;
 
@@ -90,7 +97,7 @@ export default function AddBlockForm() {
         <>
             <form
                 onSubmit={handleSubmit}
-                className="flex relative flex-col gap-6 mx-auto max-w-[750px] md:grid grid-cols-2 grid-rows-2"
+                className="flex relative w-full flex-col gap-6 mx-auto max-w-[750px] md:grid grid-cols-2 grid-rows-2"
             >
                 <Input
                     onChange={handleDescriptionInput}
@@ -101,7 +108,7 @@ export default function AddBlockForm() {
                     maxLength={limitMsg.limit}
                 />
                 <p
-                    className={`w-[20px] absolute left-[170px] text-[10px] text-right${
+                    className={`w-[20px] absolute left-[250px] md:left-[300px] text-[10px] text-right${
                         limitMsg.actual === limitMsg.limit &&
                         "font-bold text-red-500"
                     }`}
@@ -145,12 +152,14 @@ export default function AddBlockForm() {
                     className="max-w-[350px] col-span-1 row-start-2"
                 />
                 {/*--- Progress Input End --- */}
+                {/*--- Submit Button --- */}
                 <Button
                     type="submit"
                     className="text-center col-span-2 mx-auto w-full md:w-[150px] bg-amber-300"
                 >
                     Submit
                 </Button>
+                {/*--- Succes Msg --- */}
                 {succes && (
                     <Chip
                         color="success"
@@ -160,6 +169,7 @@ export default function AddBlockForm() {
                         Task added!
                     </Chip>
                 )}
+                {/*--- Error msg --- */}
                 {!valid && (
                     <Chip
                         color="warning"

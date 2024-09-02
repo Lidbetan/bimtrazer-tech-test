@@ -22,6 +22,7 @@ export default function BlockItem({ itemData }: { itemData: Block }) {
                                     : "bg-blue-600"
                             }`,
                         ],
+                        content: ["overflow-hidden flex-none max-w-[180px]"],
                     }}
                 >
                     {itemData.description.toUpperCase()}
