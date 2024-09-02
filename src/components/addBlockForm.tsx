@@ -25,6 +25,8 @@ export default function AddBlockForm() {
         limit: 40,
         actual: 0,
     });
+    //Manage succes message
+    const [succes, setSuccess] = useState<boolean>(false);
     //Random ID
     const randomId = Date.now().toString(16);
 
@@ -42,7 +44,6 @@ export default function AddBlockForm() {
     //Reads and sets the description input value and length
     const handleDescriptionInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target.value;
-        console.log(target.length);
         setLimitMsg({ ...limitMsg, actual: target.length });
         setDescriptionValue(target);
         //If there is any content on description input, sets valid to true to validate it
@@ -72,7 +73,9 @@ export default function AddBlockForm() {
                     progress: progress,
                 };
                 await updateBlockStore(newBlock);
+                setSuccess(true);
             } else {
+                setSuccess(false);
                 setValid(false);
             }
         } catch (error) {
@@ -148,6 +151,15 @@ export default function AddBlockForm() {
                 >
                     Submit
                 </Button>
+                {succes && (
+                    <Chip
+                        color="success"
+                        variant="bordered"
+                        className="col-span-2 mx-auto w-full md:w-[150px]"
+                    >
+                        Task added!
+                    </Chip>
+                )}
                 {!valid && (
                     <Chip
                         color="warning"
