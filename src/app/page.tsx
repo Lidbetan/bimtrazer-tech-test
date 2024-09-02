@@ -29,7 +29,7 @@ export default function Home() {
                         selectionMode="multiple"
                         itemClasses={{
                             base: ["py-4]"],
-                            content: ["ml-8"],
+                            content: ["flex justify-center "],
                         }}
                     >
                         {blocks &&
