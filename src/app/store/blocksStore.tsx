@@ -19,7 +19,22 @@ export const UseMyStore = create<BlockStore>((set, get) => ({
     //Update blocksList when adding a new block
     updateBlockStore: (response) => {
         const { blocks } = get();
-        set({ blocks: [...blocks, response] });
+        //Verifies if block already exist
+        const existingBlockIndex = blocks.findIndex(
+            (item) => item.id === response.id
+        );
+        //If exist, just update the data, just progress at moment
+        if (existingBlockIndex !== -1) {
+            const updatedBlocks = [...blocks];
+            updatedBlocks[existingBlockIndex] = {
+                ...updatedBlocks[existingBlockIndex],
+                progress: response.progress,
+            };
+            set({ blocks: updatedBlocks });
+            //If not exist, create a new one.
+        } else {
+            set({ blocks: [...blocks, response] });
+        }
     },
     //Updates blockList when removes a block, receives the block's ID as argument to filter the existing list.
     removeBlock: (id) => {

@@ -59,12 +59,19 @@ export default function AddBlockForm() {
     //Reads and transform the value to number
     const handleProgressInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const number = Number(e.target.value);
+
         if (number > 100) {
             setErrorInput(true);
         } else {
             setErrorInput(false);
             setProgressValue(Number(e.target.value));
         }
+    };
+    //Success message dissapear delay
+    const cleanSuccessMsg = () => {
+        setTimeout(() => {
+            setSuccess(false);
+        }, 2000);
     };
     //HandleSubmit sends the newBlock to the store
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -81,13 +88,14 @@ export default function AddBlockForm() {
                 };
                 await updateBlockStore(newBlock);
                 setSuccess(true);
+                cleanSuccessMsg();
             } else {
                 setSuccess(false);
                 setValid(false);
             }
         } catch (error) {
             console.error(
-                "Ha ocurrido un erro con su solicitud, intenter nuevamente...",
+                "Ha ocurrido un error con su solicitud, intenter nuevamente...",
                 error
             );
         }

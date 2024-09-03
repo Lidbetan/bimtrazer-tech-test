@@ -1,8 +1,9 @@
 import { Block } from "@/interfaces/block";
-import { Button, Chip } from "@nextui-org/react";
+import { Button, Chip, Modal } from "@nextui-org/react";
 import ProgressBar from "./progressBar";
 import { UseMyStore } from "@/app/store/blocksStore";
 import { DeleteIcon } from "./icons/deleteIcon";
+import UpdateBlock from "./updateBlock";
 
 export default function BlockItem({ itemData }: { itemData: Block }) {
     const { removeBlock } = UseMyStore();
@@ -44,6 +45,7 @@ export default function BlockItem({ itemData }: { itemData: Block }) {
                 >
                     <DeleteIcon fillColor="#000" width="20" height="20" />
                 </Button>
+                <UpdateBlock itemData={itemData} />
             </div>
         </>
     );
